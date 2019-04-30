@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
-
-app.use(bodyParser.json());
 
 const database = {
     users: [
@@ -23,8 +22,10 @@ const database = {
             entries: 0,
             joined: new Date()
         }
-    ]
+    ],
 }
+
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send(database.users);
@@ -67,7 +68,6 @@ app.get('/profile/:id', (req, res) => {
 })
 
 app.put('/image', (req, res) => {
-    // console.log(req.budy)
     const { id } = req.body;
     let found = false;
     database.users.forEach(user => {
