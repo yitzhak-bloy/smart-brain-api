@@ -2,32 +2,43 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex')
+
+const db = knex({
+    client: 'pg',
+    connection: {
+      host : '127.0.0.1',
+      user : 'postgres',
+      password : 'nkfh1993',
+      database : 'smartbrain'
+    }
+  });
 
 const app = express();
 
-const database = {
-    users: [
-        {
-            id: '123',
-            name: 'John',
-            email: 'John@gmail.com',
-            password: 'cookies',
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: '124',
-            name: 'Sally',
-            email: 'Sally@gmail.com',
-            password: 'bananas',
-            entries: 0,
-            joined: new Date()
-        }
-    ]
-}
+// const database = {
+//     users: [
+//         {
+//             id: '123',
+//             name: 'John',
+//             email: 'John@gmail.com',
+//             password: 'cookies',
+//             entries: 0,
+//             joined: new Date()
+//         },
+//         {
+//             id: '124',
+//             name: 'Sally',
+//             email: 'Sally@gmail.com',
+//             password: 'bananas',
+//             entries: 0,
+//             joined: new Date()
+//         }
+//     ]
+// }
 
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send(database.users);
@@ -42,16 +53,19 @@ app.post('/signin', (req, res) => {
     }
 })
 
-app.post('/register', (req, res) =>{
+app.post('/register', (req, res) => {
     const {email, name, password } = req.body;
-    database.users.push({
-        id: '125',
-        name: name,
-        email: email,
-        entries: 0,
-        joined: new Date()
-    })
-    res.json(database.users[database.users.length-1]);
+    db('users')
+        .returning('*')
+        .insert({
+            email: email,
+            name: name,
+            joined: new Date()
+        })
+        .then(user => {
+            res.json(user[0]);
+        })
+        .catch(err => res.status(400).json('unable to register'))
 })
 
 app.get('/profile/:id', (req, res) => {
