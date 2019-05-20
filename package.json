@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/yitzhak-bloy/smart-brain-api#readme",
   "devDependencies": {
-    "nodemon": "^1.18.11"
   },
   "dependencies": {
+    "nodemon": "^1.18.11",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "clarifai": "^2.9.0",
