@@ -20,7 +20,7 @@
   "devDependencies": {
   },
   "dependencies": {
-    "lodash": ">=4.17.19",
+    "lodash": ">=4.17.21",
     "nodemon": "^1.18.11",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
